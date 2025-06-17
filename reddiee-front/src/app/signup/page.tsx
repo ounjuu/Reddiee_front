@@ -34,7 +34,7 @@ export default function SignupPage() {
         nickName: "",
         phone: "",
         gender: "",
-        password: "", // ✅ 초기화
+        password: "",
       });
     } else {
       alert("오류 발생");
