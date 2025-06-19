@@ -5,29 +5,29 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="text-primary text-red-500">
+    <header className="text-primary">
       {/* 흘러가기 */}
       <div className="Header_eventFlow"></div>
 
       {/* 메뉴바 */}
-      <div className="Header_nav flex justify-between items-center px-4 py-2 text-reddieetext-500">
+      <div className="Header_nav flex justify-between items-center px-4 py-2 text-reddieetext">
         {/* 왼쪽 - 햄버거 버튼 */}
         <button
           className="flex flex-col justify-between w-6 h-5"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <span
-            className={`block h-0.5 bg-black transition-transform duration-300  ${
+            className={`block h-0.5 bg-reddieetext transition-transform duration-300  ${
               isOpen ? "rotate-45 translate-y-2" : ""
             }`}
           />
           <span
-            className={`block h-0.5 bg-black transition-opacity duration-300 ${
+            className={`block h-0.5 bg-reddieetext transition-opacity duration-300 ${
               isOpen ? "opacity-0" : ""
             }`}
           />
           <span
-            className={`block h-0.5 bg-black transition-transform duration-300 ${
+            className={`block h-0.5 bg-reddieetext transition-transform duration-300 ${
               isOpen ? "-rotate-45 -translate-y-2.5" : ""
             }`}
           />
