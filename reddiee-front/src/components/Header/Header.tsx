@@ -5,8 +5,12 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header>
-      <div className="Header_eventFlow flex justify-between items-center px-4 py-2">
+    <header className="text-reddieetext">
+      {/* 흘러가기 */}
+      <div className="Header_eventFlow"></div>
+
+      {/* 메뉴바 */}
+      <div className="Header_nav flex justify-between items-center px-4 py-2 text-reddieetext">
         {/* 왼쪽 - 햄버거 버튼 */}
         <button
           className="flex flex-col justify-between w-6 h-5"
@@ -30,7 +34,9 @@ export default function Header() {
         </button>
 
         {/* 가운데 로고 */}
-        <div className="text-lg font-bold">REDDIEE</div>
+        <div className="text-lg font-bold absolute left-1/2 -translate-x-1/2">
+          REDDIEE
+        </div>
 
         {/* 오른쪽 메뉴 */}
         <div className="flex gap-3 text-sm">
