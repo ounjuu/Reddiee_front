@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import axios from "axios";
+import HomePage from "@/components/Home/Home";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,7 +16,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-2xl font-bold">홈 페이지입니다</h1>
+      <h1 className="text-2xl font-bold">
+        <HomePage />
+      </h1>
     </div>
   );
 }
