@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import axios from "axios";
-import HomePage from "@/components/Home/Home";
+import HomePage from "@/components/Home/HomePage";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
