@@ -10,7 +10,7 @@ const titanOne = Titan_One({
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const handleClose = () => setIsOpen(false);
   return (
     <header className="text-primary">
       {/* 흘러가기 */}
@@ -53,6 +53,25 @@ export default function Header() {
           <div>Login</div>
           <div>Cart</div>
           <div>My Page</div>
+        </div>
+      </div>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`
+    fixed top-0 left-0 h-full w-64 bg-reddieetext text-white z-50
+    transform transition-transform duration-300 ease-in-out
+    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    
+  `}
+      >
+        <div className="p-4 flex justify-between items-center">
+          <span className="text-lg font-bold">왼쪽 메뉴바</span>
+          <button
+            onClick={handleClose}
+            className="text-white text-xl font-bold"
+          >
+            ×
+          </button>
         </div>
       </div>
     </header>
