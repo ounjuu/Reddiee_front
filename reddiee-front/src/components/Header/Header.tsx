@@ -10,32 +10,36 @@ const titanOne = Titan_One({
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => setIsOpen(false);
+
   return (
-    <header className="text-primary">
+    <header className="text-primary relative z-0">
       {/* 흘러가기 */}
       <div className="Header_eventFlow"></div>
 
       {/* 메뉴바 */}
-      <div className="Header_nav flex justify-between items-center px-5 py-6 text-reddieetext backdrop-blur">
+      <div
+        className={`Header_nav flex justify-between items-center px-5 py-6 text-reddieetext relative z-10 ${
+          isOpen ? "" : "backdrop-blur"
+        }`}
+      >
         {/* 왼쪽 - 햄버거 버튼 */}
         <button
-          className="flex flex-col justify-between w-6 h-5 cursor-pointer"
+          className="flex flex-col justify-between w-6 h-5 cursor-pointer z-50 relative"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <span
-            className={`block h-0.5 bg-reddieetext transition-transform duration-300  ${
-              isOpen ? "rotate-45 translate-y-2" : ""
+            className={`block h-0.5 bg-reddieetext transition-transform duration-300 z-50 relative  ${
+              isOpen ? "rotate-45 translate-y-2 bg-white" : ""
             }`}
           />
           <span
-            className={`block h-0.5 bg-reddieetext transition-opacity duration-300 ${
-              isOpen ? "opacity-0" : ""
+            className={`block h-0.5 bg-reddieetext transition-opacity duration-300 z-50 relative ${
+              isOpen ? "opacity-0 " : ""
             }`}
           />
           <span
-            className={`block h-0.5 bg-reddieetext transition-transform duration-300 ${
-              isOpen ? "-rotate-45 -translate-y-2.5" : ""
+            className={`block h-0.5 bg-reddieetext transition-transform duration-300 z-50 relative ${
+              isOpen ? "-rotate-45 -translate-y-2.5 bg-white" : ""
             }`}
           />
         </button>
@@ -58,20 +62,14 @@ export default function Header() {
       <div
         onClick={(e) => e.stopPropagation()}
         className={`
-    fixed top-0 left-0 h-full w-64 bg-reddieetext text-white z-50
+    fixed top-0 left-0 h-full w-64 bg-reddieetext text-white z-49
     transform transition-transform duration-300 ease-in-out
     ${isOpen ? "translate-x-0" : "-translate-x-full"}
     
   `}
       >
         <div className="p-4 flex justify-between items-center">
-          <span className="text-lg font-bold">왼쪽 메뉴바</span>
-          <button
-            onClick={handleClose}
-            className="text-white text-xl font-bold"
-          >
-            ×
-          </button>
+          <span className="text-lg font-bold"></span>
         </div>
       </div>
     </header>
