@@ -14,7 +14,23 @@ export default function Header() {
   return (
     <header className="text-primary relative z-0">
       {/* 흘러가기 */}
-      <div className="Header_eventFlow"></div>
+      <div className="overflow-hidden whitespace-nowrap text-reddieetext text-xs">
+        <div className="flex animate-marquee w-max tracking-wider">
+          {/* 문장 블록 1 */}
+          <div className="flex shrink-0 w-1/2 grow-0" aria-hidden="true">
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+          </div>
+
+          {/* 문장 블록 2 (복제) */}
+          <div className="flex shrink-0 w-1/2 grow-0" aria-hidden="true">
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+            <span className="px-16">Ready to move? Get geared at reddiee.</span>
+          </div>
+        </div>
+      </div>
 
       {/* 메뉴바 */}
       <div
