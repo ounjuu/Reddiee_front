@@ -14,7 +14,11 @@ export default function Header() {
   return (
     <header className="text-primary relative z-0">
       {/* 흘러가기 */}
-      <div className="overflow-hidden whitespace-nowrap text-reddieetext text-xs">
+      <div
+        className={`overflow-hidden whitespace-nowrap text-reddieetext text-xs py-2 border-b border-reddieetext border-opacity-30 ${
+          isOpen ? "" : "backdrop-blur"
+        }`}
+      >
         <div className="flex animate-marquee w-max tracking-wider">
           {/* 문장 블록 1 */}
           <div className="flex shrink-0 w-1/2 grow-0" aria-hidden="true">
