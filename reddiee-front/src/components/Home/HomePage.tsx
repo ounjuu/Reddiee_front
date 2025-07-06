@@ -3,9 +3,8 @@
 // 메인페이지
 export default function HomePage() {
   return (
-    <div className="flex items-start flex-col">
-      <img alt="wave image" src="/wave.png" />
-      <img alt="wave image" src="/wave.png" />
+    <div className="w-screen h-screen bg-cover bg-no-repeat bg-center flex items-start justify-center">
+      <img alt="swimming_people image" src="/swimming_people.png" />
     </div>
   );
 }
