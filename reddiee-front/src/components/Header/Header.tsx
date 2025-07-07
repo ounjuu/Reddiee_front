@@ -12,7 +12,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="text-primary relative z-0">
+    <header className="text-primary z-0 fixed top-0 left-0 w-screen">
       {/* 흘러가기 */}
       <div
         className={`overflow-hidden whitespace-nowrap text-reddieetext text-xs py-2 border-b border-reddieetext border-opacity-30 ${
@@ -73,7 +73,7 @@ export default function Header() {
         </div>
 
         {/* 오른쪽 메뉴 */}
-        <div className="flex gap-3 text-sm cursor-pointer">
+        <div className="flex gap-3 text-sm cursor-pointer pr-5">
           <div>Login</div>
           <div>Cart</div>
           <div>My Page</div>

@@ -19,16 +19,16 @@ export default function Footer() {
     <div
       className={`w-screen text-reddieetext text-xs ${
         nanumGothic.variable
-      } text-center backdrop-blur pt-8 pb-6 relative fixed bottom-0 left-0 transition-transform duration-300 ${
+      } text-center backdrop-blur pt-9 pb-6 fixed bottom-0 left-0 transition-transform duration-300 ${
         isOpen ? "translate-y-0" : "translate-y-full"
       }`}
       style={{ fontFamily: "var(--font-nanum-gothic)" }}
     >
       <div
-        className="absolute -top-4 left-1/2 transform -translate-x-1/2"
+        className="absolute -top-4 left-1/2 transform -translate-x-1/2 cursor-pointer"
         onClick={toggleFooter}
       >
-        <img src="/cherry.png" className="w-9"></img>
+        <img src="/cherry.png" className="w-10"></img>
       </div>
       <span>
         <b>COMPANY :</b> 레디(REDDIEE)
