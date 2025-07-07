@@ -4,7 +4,7 @@ import { Titan_One } from "next/font/google";
 
 const titanOne = Titan_One({
   subsets: ["latin"], // 라틴 문자 지원
-  weight: "400", // Titan One은 보통 400(regular)만 있음
+  weight: "400",
   variable: "--font-titan-one",
 });
 

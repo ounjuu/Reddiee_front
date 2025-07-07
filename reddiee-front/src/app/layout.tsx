@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Fascinate } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 import Background from "@/components/Background/Background";
 
 const geistSans = Geist({
@@ -28,11 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <Background />
-        <Header />
-        {children}
+        <div className="overflow-hidden">
+          <Header />
+          {children}
+
+          <Footer />
+        </div>
       </body>
     </html>
   );
