@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <>
       <div
-        className="h-screen pt-[72px] bg-cover bg-no-repeat bg-center flex items-center justify-center overflow-x-hidden"
+        className="h-screen w-screen pt-[72px] flex items-center justify-center overflow-x-hidden"
         ref={section1Ref}
       >
         <img
@@ -42,7 +42,7 @@ export default function HomePage() {
         />
       </div>
       <div
-        className="pt-[72px] h-screen bg-cover bg-no-repeat bg-center flex items-center justify-center overflow-x-hidden "
+        className="pt-[72px] h-screen flex items-center justify-center overflow-x-hidden bg-pink-200"
         ref={section2Ref}
       >
         <img
@@ -52,7 +52,7 @@ export default function HomePage() {
         />
       </div>
       <div
-        className="pt-[72px] h-screen bg-cover bg-no-repeat bg-center flex items-center justify-center overflow-x-hidden"
+        className="pt-[72px] h-screen flex items-center justify-center overflow-x-hidden bg-yellow-300"
         ref={section3Ref}
       >
         <img
