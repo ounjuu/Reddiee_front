@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Titan_One } from "next/font/google";
+import { ShoppingCart, LogIn, User } from "lucide-react";
 
 const titanOne = Titan_One({
   subsets: ["latin"], // 라틴 문자 지원
@@ -72,11 +73,20 @@ export default function Header() {
           Reddie
         </div>
 
-        {/* 오른쪽 메뉴 */}
-        <div className="flex gap-3 text-sm cursor-pointer pr-5">
-          <div>Login</div>
-          <div>Cart</div>
-          <div>My Page</div>
+        <div className="flex items-center gap-3 sm:pr-5">
+          {/* 텍스트 메뉴 (sm 이상에서만 보임) */}
+          <div className="hidden sm:flex gap-3 text-sm cursor-pointer">
+            <div>Login</div>
+            <div>Cart</div>
+            <div>My Page</div>
+          </div>
+
+          {/* 아이콘 메뉴 (sm 미만에서만 보임) */}
+          <div className="flex sm:hidden gap-2 text-reddieetext cursor-pointer">
+            <LogIn size={16} />
+            <ShoppingCart size={16} />
+            <User size={16} />
+          </div>
         </div>
       </div>
       <div
