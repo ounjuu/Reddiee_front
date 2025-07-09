@@ -100,13 +100,17 @@ export default function Header() {
         onClick={(e) => e.stopPropagation()}
         className={`
     fixed top-0 left-0 h-full w-64 bg-reddieetext text-white z-49
-    transform transition-transform duration-300 ease-in-out
+    transform transition-transform duration-300 ease-in-out flex justify-start items-start px-3 py-24 
     ${isOpen ? "translate-x-0" : "-translate-x-full"}
     
   `}
       >
-        <div className="p-4 flex justify-between items-center">
-          <span className="text-lg font-bold"></span>
+        <div className="p-4 flex flex-col justify-between items-start gap-4 cursor-pointer">
+          <span className="text-lg font-bold">Caps</span>
+          <span className="text-lg font-bold">Bags</span>
+          <span className="text-lg font-bold">Apparel</span>
+          <span className="text-lg font-bold">ACC</span>
+          <span className="text-lg font-bold">For Customer</span>
         </div>
       </div>
     </header>
