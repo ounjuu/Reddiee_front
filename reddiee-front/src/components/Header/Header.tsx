@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { Titan_One } from "next/font/google";
 import { ShoppingCart, LogIn, User } from "lucide-react";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 const titanOne = Titan_One({
   subsets: ["latin"], // 라틴 문자 지원
@@ -12,6 +13,9 @@ const titanOne = Titan_One({
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useOutsideClick<HTMLDivElement>(() => {
+    setIsOpen(false);
+  });
 
   const clickMain = () => {
     const router = useRouter();
@@ -19,7 +23,10 @@ export default function Header() {
   };
 
   return (
-    <header className="text-primary z-0 fixed top-0 left-0 w-screen">
+    <header
+      className="text-primary z-0 fixed top-0 left-0 w-screen"
+      ref={menuRef}
+    >
       {/* 흘러가기 */}
       <div
         className={`overflow-hidden whitespace-nowrap text-reddieetext text-xs py-2 border-b border-reddieetext border-opacity-30 ${
