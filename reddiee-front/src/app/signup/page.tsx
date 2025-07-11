@@ -20,7 +20,7 @@ export default function SignupPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/users", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -42,42 +42,44 @@ export default function SignupPage() {
   };
 
   return (
-    <form onSubmit={onSubmit} style={{ maxWidth: 400, margin: "auto" }}>
-      <input
-        name="email"
-        value={form.email}
-        onChange={onChange}
-        placeholder="이메일"
-        type="email"
-        required
-      />
-      <input
-        name="nickName"
-        value={form.nickName}
-        onChange={onChange}
-        placeholder="닉네임"
-        required
-      />
-      <input
-        name="phone"
-        value={form.phone}
-        onChange={onChange}
-        placeholder="전화번호"
-      />
-      <select name="gender" value={form.gender} onChange={onChange}>
-        <option value="">성별 선택</option>
-        <option value="male">남자</option>
-        <option value="female">여자</option>
-      </select>
-      <input
-        name="password"
-        type="password"
-        value={form.password}
-        onChange={onChange}
-        placeholder="비밀번호"
-        required // ✅ 필수
-      />
-      <button type="submit">회원가입</button>
-    </form>
+    <div className="flex justify-center items-center h-screen p-12">
+      <form onSubmit={onSubmit} style={{ maxWidth: 400, margin: "auto" }}>
+        <input
+          name="email"
+          value={form.email}
+          onChange={onChange}
+          placeholder="이메일"
+          type="email"
+          required
+        />
+        <input
+          name="nickName"
+          value={form.nickName}
+          onChange={onChange}
+          placeholder="닉네임"
+          required
+        />
+        <input
+          name="phone"
+          value={form.phone}
+          onChange={onChange}
+          placeholder="전화번호"
+        />
+        <select name="gender" value={form.gender} onChange={onChange}>
+          <option value="">성별 선택</option>
+          <option value="male">남자</option>
+          <option value="female">여자</option>
+        </select>
+        <input
+          name="password"
+          type="password"
+          value={form.password}
+          onChange={onChange}
+          placeholder="비밀번호"
+          required // ✅ 필수
+        />
+        <button type="submit">회원가입</button>
+      </form>
+    </div>
   );
 }
