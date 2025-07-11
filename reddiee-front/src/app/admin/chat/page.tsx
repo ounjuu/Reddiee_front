@@ -50,14 +50,23 @@ export default function AdminPage() {
       fetchUser();
     } else {
       if (user.role !== "admin") {
-        router.replace("/403");
+        router.replace("/");
       } else {
         setLoading(false);
       }
     }
   }, [user, setUser, router]);
 
-  if (loading) return <div>권한 검사 중...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        권한 검사 중...
+      </div>
+    );
 
-  return <div>✅ 관리자 전용 페이지 콘텐츠</div>;
+  return (
+    <div className="flex justify-center items-center h-screen">
+      ✅ 관리자 전용 페이지 콘텐츠
+    </div>
+  );
 }
