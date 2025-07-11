@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Titan_One } from "next/font/google";
 import { ShoppingCart, LogIn, User } from "lucide-react";

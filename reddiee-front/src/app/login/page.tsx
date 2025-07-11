@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserStore } from "@/stores/useUserStore";
 import { useState } from "react";
 import Cookies from "js-cookie";
 
@@ -28,10 +29,10 @@ export default function Login() {
       }
 
       const data = await res.json();
-      alert("로그인 성공!");
-      console.log("토큰:", data.access_token);
-      // 토큰 저장 및 인증 상태 처리 필요
+
       Cookies.set("access_token", data.access_token, { expires: 1, path: "/" });
+      useUserStore.getState().setUser(data.user);
+      alert("로그인 성공!");
     } catch {
       alert("서버 오류 발생");
     }
