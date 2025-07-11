@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Background from "@/components/Background/Background";
+import ChatBtn from "@/components/ChatBtn/ChatBtn";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <Background />
         <Header />
+        <ChatBtn />
         <div className="overflow-hidden">
           {children}
           <Footer />
