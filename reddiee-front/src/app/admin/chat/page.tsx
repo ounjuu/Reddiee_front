@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Cookies from "js-cookie";
@@ -9,40 +9,55 @@ export default function AdminPage() {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
-      if (!user) {
-        const token = Cookies.get("access_token");
-        if (!token) {
-          router.push("/login");
+      const token = Cookies.get("access_token");
+      // 토큰이 없다면 로그인 페이지로
+      if (!token) {
+        router.replace("/login");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) throw new Error("인증 실패");
+
+        const userData = await res.json();
+        setUser(userData);
+
+        // admin이 아니면 403
+        if (userData.role !== "admin") {
+          router.replace("/403");
           return;
         }
-        // 백엔드에 토큰 보내서 유저 정보 받아오기
-        try {
-          const res = await fetch("/auth/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!res.ok) throw new Error("인증 실패");
-          const userData = await res.json();
-          setUser(userData);
 
-          if (userData.role !== "admin") {
-            router.push("/403");
-          }
-        } catch {
-          router.push("/login");
-        }
-      } else {
-        if (user.role !== "admin") {
-          router.push("/403");
-        }
+        setLoading(false);
+      } catch (err) {
+        router.replace("/login");
       }
     }
-    fetchUser();
-  }, [user, router, setUser]);
 
-  if (!user || user.role !== "admin") return <div>권한 검사 중...</div>;
+    // zustand에 유저가 없을 때만 fetch
+    if (!user) {
+      fetchUser();
+    } else {
+      if (user.role !== "admin") {
+        router.replace("/403");
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [user, setUser, router]);
 
-  return <div>관리자 전용 페이지 콘텐츠</div>;
+  if (loading) return <div>권한 검사 중...</div>;
+
+  return <div>✅ 관리자 전용 페이지 콘텐츠</div>;
 }

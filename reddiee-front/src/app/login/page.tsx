@@ -32,6 +32,8 @@ export default function Login() {
 
       Cookies.set("access_token", data.access_token, { expires: 1, path: "/" });
       useUserStore.getState().setUser(data.user);
+      console.log(data.user, "data.user?");
+      console.log(useUserStore.getState().user);
       alert("로그인 성공!");
     } catch {
       alert("서버 오류 발생");
