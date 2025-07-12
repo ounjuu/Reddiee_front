@@ -132,7 +132,7 @@ export default function AdminChatPage() {
     );
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4">
+    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4  pt-[100px]">
       <h1 className="text-2xl font-bold mb-4">✅ 관리자 채팅 페이지</h1>
 
       <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white">
