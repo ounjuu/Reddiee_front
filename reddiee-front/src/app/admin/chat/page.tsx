@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Cookies from "js-cookie";
 
+// 관리자 챗 컴포넌트
+import AdminChatPage from "@/components/AdminChatPage/AdminChatPage";
+
 export default function AdminPage() {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -66,7 +69,7 @@ export default function AdminPage() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      ✅ 관리자 전용 페이지 콘텐츠
+      <AdminChatPage />
     </div>
   );
 }
