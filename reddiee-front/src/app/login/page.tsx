@@ -3,10 +3,11 @@
 import { useUserStore } from "@/stores/useUserStore";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-
+  const router = useRouter();
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -35,6 +36,11 @@ export default function Login() {
       console.log(data.user, "data.user?");
       console.log(useUserStore.getState().user);
       alert("로그인 성공!");
+      if (data.user.role === "admin") {
+        router.push("/admin/chat");
+      } else {
+        router.push("/");
+      }
     } catch {
       alert("서버 오류 발생");
     }
