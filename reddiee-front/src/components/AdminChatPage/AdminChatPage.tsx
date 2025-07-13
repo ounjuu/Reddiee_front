@@ -82,7 +82,7 @@ export default function AdminChatPage() {
     // 서버에서 메시지 수신
     socket.on("message", (msg: Message) => {
       // 관리자니까 모든 메시지 받거나, 채팅방 필터링 가능
-      if (msg.chatRoom.id === ADMIN_CHAT_ROOM_ID) {
+      if (msg.chatRoom && msg.chatRoom.id === ADMIN_CHAT_ROOM_ID) {
         setMessages((prev) => [...prev, msg]);
       }
     });
