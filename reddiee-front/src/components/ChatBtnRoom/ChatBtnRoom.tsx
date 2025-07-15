@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import socket from "@/utils/socket";
 import { useUserStore } from "@/stores/useUserStore";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { Cookie } from "next/font/google";
 
 type Message = {
   id: number;
@@ -22,6 +25,49 @@ export default function ChatBtnRoom({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
+  const token = Cookies.get("access_token");
+
+  // 방 id 추가
+  const [roomId, setRoomId] = useState<number | null>(null);
+
+  useEffect(() => {
+    console.log(user, "user?");
+    if (!user) {
+      console.log("로그인이 필요합니다.");
+      return;
+    }
+
+    socket.emit("createChatRoom", { user1Id: user.id, user2Id: 5 });
+
+    socket.on("chatRoomCreated", (newRoomId: number) => {
+      setRoomId(newRoomId);
+      console.log(newRoomId);
+      socket.emit("joinRoom", newRoomId);
+
+      // 방 메시지 API 호출해서 기존 메시지 가져오기
+      fetchMessages(newRoomId);
+    });
+
+    return () => {
+      socket.off("chatRoomCreated");
+    };
+  }, [user]);
+
+  const fetchMessages = async (roomId: number) => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/messages/${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMessages(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     socket.on("message", (msg: Message) => {
@@ -37,10 +83,17 @@ export default function ChatBtnRoom({
   }, [messages]);
 
   const sendMessage = () => {
-    if (!input.trim() || !user) return;
+    if (!user || !user.id) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    if (!input.trim()) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
 
     socket.emit("message", {
-      chatRoomId: 1 /* 여기에 실제 채팅방 ID */,
+      chatRoomId: roomId,
       senderId: user.id,
       message: input.trim(),
     });
