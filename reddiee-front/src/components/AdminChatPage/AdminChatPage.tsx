@@ -31,7 +31,7 @@ export default function AdminChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 임시로 admin이 보는 채팅방 id 지정 (관리자용 모든 채팅방을 보려면 API/백엔드 추가 필요)
-  const ADMIN_CHAT_ROOM_ID = 1;
+  const ADMIN_CHAT_ROOM_ID = 5;
 
   useEffect(() => {
     async function fetchUser() {

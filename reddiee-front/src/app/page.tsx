@@ -28,7 +28,7 @@ export default function Home() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser(res.data); // ✅ 유저 정보 저장
+        setUser(res.data);
       } catch (error) {
         clearUser(); // ✅ 로그인 안 되어 있음
         console.log("로그인 유지 실패:", error);

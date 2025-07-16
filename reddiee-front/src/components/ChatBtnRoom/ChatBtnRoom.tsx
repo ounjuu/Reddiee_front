@@ -5,7 +5,6 @@ import socket from "@/utils/socket";
 import { useUserStore } from "@/stores/useUserStore";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Cookie } from "next/font/google";
 
 type Message = {
   id: number;
@@ -36,12 +35,12 @@ export default function ChatBtnRoom({
       console.log("로그인이 필요합니다.");
       return;
     }
-
+    console.log(user, "user?");
     socket.emit("createChatRoom", { user1Id: user.id, user2Id: 5 });
 
     socket.on("chatRoomCreated", (newRoomId: number) => {
       setRoomId(newRoomId);
-      console.log(newRoomId);
+      console.log(newRoomId, "newRoomId");
       socket.emit("joinRoom", newRoomId);
 
       // 방 메시지 API 호출해서 기존 메시지 가져오기
@@ -83,7 +82,7 @@ export default function ChatBtnRoom({
   }, [messages]);
 
   const sendMessage = () => {
-    if (!user || !user.id) {
+    if (!user) {
       alert("로그인이 필요합니다.");
       return;
     }
