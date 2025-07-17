@@ -10,7 +10,12 @@ type Message = {
   id: number;
   content: string;
   createdAt: string;
-  sender: {
+  user1: {
+    id: number;
+    nickName: string;
+    role: string;
+  };
+  user2: {
     id: number;
     nickName: string;
     role: string;
@@ -31,6 +36,8 @@ export default function AdminChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 임시로 admin이 보는 채팅방 id 지정 (관리자용 모든 채팅방을 보려면 API/백엔드 추가 필요)
+  const [chatRooms, setChatRooms] = useState<number[]>([]);
+  const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const ADMIN_CHAT_ROOM_ID = 5;
 
   useEffect(() => {
@@ -79,28 +86,34 @@ export default function AdminChatPage() {
   useEffect(() => {
     if (loading) return;
 
-    // 서버에서 메시지 수신
-    socket.on("message", (msg: Message) => {
-      // 관리자니까 모든 메시지 받거나, 채팅방 필터링 가능
-      if (msg.chatRoom && msg.chatRoom.id === ADMIN_CHAT_ROOM_ID) {
-        setMessages((prev) => [...prev, msg]);
-      }
-    });
-
-    // 초기 메시지 불러오기 (필요시 API 추가)
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/chat/messages/${ADMIN_CHAT_ROOM_ID}`,
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("access_token")}`,
-        },
-      }
-    )
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/rooms`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("access_token")}`,
+      },
+    })
       .then((res) => res.json())
-      .then((msgs) => {
-        setMessages(Array.isArray(msgs) ? msgs : []);
+      .then((msgs: Message[]) => {
+        setMessages(msgs);
+        console.log(msgs, "msgs?");
+        // 채팅방 ID 목록 추출
+        const uniqueRoomIds = [
+          ...new Set(
+            msgs
+              .filter((msg) => msg.chatRoom && msg.chatRoom.id !== undefined)
+              .map((msg) => msg.chatRoom.id)
+          ),
+        ];
+        setChatRooms(uniqueRoomIds);
+        setSelectedRoom(uniqueRoomIds[0] || null); // 기본 선택
       })
       .catch(console.error);
+
+    socket.on("message", (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
+      if (!chatRooms.includes(msg.chatRoom.id)) {
+        setChatRooms((prev) => [...prev, msg.chatRoom.id]);
+      }
+    });
 
     return () => {
       socket.off("message");
@@ -132,7 +145,23 @@ export default function AdminChatPage() {
     );
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4  pt-[100px]">
+    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4 pt-[100px]">
+      <div className="flex mb-4 space-x-2">
+        {chatRooms.map((roomId) => (
+          <button
+            key={roomId}
+            onClick={() => setSelectedRoom(roomId)}
+            className={`px-3 py-1 rounded ${
+              selectedRoom === roomId
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+          >
+            방 #{roomId}
+          </button>
+        ))}
+      </div>
+
       <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white">
         {messages.length === 0 && (
           <p className="text-center text-gray-500">채팅이 없습니다.</p>
@@ -142,18 +171,18 @@ export default function AdminChatPage() {
           <div
             key={msg.id}
             className={`mb-2 flex ${
-              msg.sender.id === user?.id ? "justify-end" : "justify-start"
+              msg.user1?.id === user?.id ? "justify-end" : "justify-start"
             }`}
           >
             <div
               className={`px-3 py-1 rounded-lg max-w-xs break-words ${
-                msg.sender.id === user?.id
+                msg.user1.id === user?.id
                   ? "bg-blue-400 text-white"
                   : "bg-gray-200 text-gray-900"
               }`}
             >
               <p className="text-xs font-semibold">
-                {msg.sender.nickName} ({msg.sender.role})
+                {msg.user1.nickName} ({msg.user1.role})
               </p>
               <p>{msg.content}</p>
               <p className="text-xs text-gray-400 text-right">
