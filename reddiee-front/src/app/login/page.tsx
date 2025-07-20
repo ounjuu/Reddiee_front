@@ -63,7 +63,7 @@ export default function Login() {
           value={form.email}
           onChange={onChange}
           style={{ padding: 8, fontSize: 16 }}
-          className="border border-gray-400 rounded"
+          className="border rounded"
         />
         <input
           name="password"
@@ -73,7 +73,7 @@ export default function Login() {
           value={form.password}
           onChange={onChange}
           style={{ padding: 8, fontSize: 16 }}
-          className="border border-gray-400 rounded"
+          className="border rounded"
         />
         <button
           type="submit"
