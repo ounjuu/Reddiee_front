@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Cookies from "js-cookie";
 
+import ProductAdd from "@/components/ProductAdd/ProductAdd";
+
 export default function AddProduct() {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -65,8 +67,8 @@ export default function AddProduct() {
     );
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      상품 등록 페이지
+    <div className="flex justify-center pt-[100px]">
+      <ProductAdd />
     </div>
   );
 }
