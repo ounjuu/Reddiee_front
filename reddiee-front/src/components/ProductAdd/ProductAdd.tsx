@@ -49,7 +49,6 @@ export default function ProductAdd() {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
         }
       );
       alert("상품 등록 성공!");
