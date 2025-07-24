@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Titan_One } from "next/font/google";
 import { ShoppingCart, LogIn, User } from "lucide-react";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import Link from "next/link";
 
 const titanOne = Titan_One({
   subsets: ["latin"], // 라틴 문자 지원
@@ -113,11 +114,31 @@ export default function Header() {
   `}
       >
         <div className="p-4 flex flex-col justify-between items-start gap-4 cursor-pointer">
-          <span className="text-lg font-bold">Caps</span>
-          <span className="text-lg font-bold">Bags</span>
-          <span className="text-lg font-bold">Apparel</span>
-          <span className="text-lg font-bold">ACC</span>
-          <span className="text-lg font-bold">For Customer</span>
+          <Link href="/category/caps">
+            <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
+              Caps
+            </span>
+          </Link>
+          <Link href="/category/bags">
+            <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
+              Bags
+            </span>
+          </Link>
+          <Link href="/category/apparel">
+            <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
+              Apparel
+            </span>
+          </Link>
+          <Link href="/category/acc">
+            <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
+              ACC
+            </span>
+          </Link>
+          <Link href="/customer">
+            <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
+              For Customer
+            </span>
+          </Link>
         </div>
       </div>
     </header>
