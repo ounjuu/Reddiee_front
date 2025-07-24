@@ -29,7 +29,7 @@ export default function CategoryPage() {
   }, [category]);
 
   return (
-    <div className="p-8">
+    <div className="pt-[100px] px-[30px]">
       <h1 className="text-2xl font-bold capitalize mb-6">{category}</h1>
       {products.length > 0 ? (
         <ProductGrid products={products} />

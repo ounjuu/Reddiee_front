@@ -2,19 +2,21 @@ interface Product {
   id: number;
   name: string;
   price: number;
-  image_url: string;
+  imageUrl: string;
+  description: string;
 }
 
 export default function ProductGrid({ products }: { products: Product[] }) {
+  console.log(products);
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 ">
       {products.map((product) => (
         <div
           key={product.id}
           className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
         >
           <img
-            src={product.image_url}
+            src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
             alt={product.name}
             className="w-full h-48 object-cover"
           />
@@ -23,6 +25,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             <p className="text-sm text-gray-600">
               {product.price.toLocaleString()}원
             </p>
+            <p>{product.description}</p>
           </div>
         </div>
       ))}
