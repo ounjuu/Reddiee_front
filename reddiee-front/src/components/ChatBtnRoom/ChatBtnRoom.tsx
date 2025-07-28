@@ -5,6 +5,7 @@ import socket from "@/utils/socket";
 import { useUserStore } from "@/stores/useUserStore";
 import axios from "axios";
 import Cookies from "js-cookie";
+import axiosInstance from "@/lib/axiosInstance";
 
 type Message = {
   id: number;
@@ -54,13 +55,8 @@ export default function ChatBtnRoom({
 
   const fetchMessages = async (roomId: number) => {
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/chat/messages/${roomId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const res = await axiosInstance.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/messages/${roomId}`
       );
       setMessages(res.data);
     } catch (error) {
