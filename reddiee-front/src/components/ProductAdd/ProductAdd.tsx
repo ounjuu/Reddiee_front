@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import axiosInstance from "@/lib/axiosInstance";
 
@@ -45,12 +44,6 @@ export default function ProductAdd() {
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/products`,
         formData
-        // {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data",
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
       );
       alert("상품 등록 성공!");
     } catch (error) {

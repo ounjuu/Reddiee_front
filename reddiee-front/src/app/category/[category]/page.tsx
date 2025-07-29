@@ -36,7 +36,7 @@ export default function CategoryPage() {
       ) : (
         <div className="flex items-center justify-center h-[50vh]">
           <p className="text-reddieetext text-lg font-semibold">
-            해당 카테고리에 등록된 상품이 없습니다!
+            등록된 상품이 없습니다.
           </p>
         </div>
       )}
