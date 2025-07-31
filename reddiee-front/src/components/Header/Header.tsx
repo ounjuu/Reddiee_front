@@ -108,8 +108,8 @@ export default function Header() {
             ) : (
               <div onClick={() => router.push("/login")}>Login</div>
             )}
-            <div>Cart</div>
-            <div>My Page</div>
+            <div onClick={() => router.push("/cart")}>Cart</div>
+            <div onClick={() => router.push("/mypage")}>My Page</div>
           </div>
 
           {/* 아이콘 메뉴 (sm 미만에서만 보임) */}
@@ -122,8 +122,8 @@ export default function Header() {
             ) : (
               <LogIn size={16} onClick={() => router.push("/login")} />
             )}
-            <ShoppingCart size={16} />
-            <User size={16} />
+            <ShoppingCart size={16} onClick={() => router.push("/cart")} />
+            <User size={16} onClick={() => router.push("/mypage")} />
           </div>
         </div>
       </div>
