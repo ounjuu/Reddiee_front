@@ -18,7 +18,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           <img
             src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
             alt={product.name}
-            className="w-full h-48 object-cover"
+            className="w-full h-48 object-contain p-5"
           />
           <div className="p-4">
             <h2 className="text-lg font-semibold">{product.name}</h2>

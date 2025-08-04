@@ -51,26 +51,18 @@ const ProductList = () => {
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ backgroundColor: "#f2f2f2" }}>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>이미지</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>이름</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>설명</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>
-              카테고리
-            </th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>가격</th>
-            <th style={{ border: "1px solid #ccc", padding: "8px" }}>삭제</th>
+            <th>이미지</th>
+            <th>이름</th>
+            <th>설명</th>
+            <th>카테고리</th>
+            <th>가격</th>
+            <th>삭제</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
             <tr key={product.id}>
-              <td
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "8px",
-                  textAlign: "center",
-                }}
-              >
+              <td>
                 <img
                   src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
                   alt={product.name}
@@ -78,19 +70,11 @@ const ProductList = () => {
                   height={100}
                 />
               </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                {product.name}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                {product.description}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                {product.category}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                ₩{product.price.toLocaleString()}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+              <td>{product.name}</td>
+              <td>{product.description}</td>
+              <td>{product.category}</td>
+              <td>{product.price.toLocaleString()}</td>
+              <td>
                 <button onClick={() => handleDelete(product.id)}>삭제</button>
               </td>
             </tr>
