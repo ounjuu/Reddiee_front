@@ -177,7 +177,7 @@ export default function AdminChatPage() {
             <div
               className={`px-3 py-1 rounded-lg max-w-xs break-words ${
                 msg.user1.id === user?.id
-                  ? "bg-blue-400 text-white"
+                  ? "bg-red-400 text-white"
                   : "bg-gray-200 text-gray-900"
               }`}
             >
@@ -205,7 +205,7 @@ export default function AdminChatPage() {
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-reddieetext text-white px-3 py-1 rounded hover:bg-red-600"
         >
           전송
         </button>

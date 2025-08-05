@@ -33,7 +33,7 @@ export default function ChatBtnRoom({
   useEffect(() => {
     console.log(user, "user?");
     if (!user) {
-      console.log("로그인이 필요합니다.");
+      console.log("채팅 이용을 위해 로그인이 필요합니다.");
       return;
     }
     console.log(user, "user?");
@@ -127,13 +127,13 @@ export default function ChatBtnRoom({
               <div
                 className={`px-3 py-1 rounded-lg max-w-[80%] break-words ${
                   msg.sender.id === user?.id
-                    ? "bg-green-500 text-white"
+                    ? "bg-red-300 text-white"
                     : "bg-gray-200 text-gray-900"
                 }`}
               >
                 <p className="text-xs font-semibold">{msg.sender.nickName}</p>
                 <p>{msg.content}</p>
-                <p className="text-xs text-gray-400 text-right">
+                <p className="text-xs text-gray-500 text-right">
                   {new Date(msg.createdAt).toLocaleTimeString()}
                 </p>
               </div>
@@ -155,7 +155,7 @@ export default function ChatBtnRoom({
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-600 text-white px-2 rounded text-[12px] flex justify-center items-center"
+          className="bg-reddieetext text-white px-2 rounded text-[12px] flex justify-center items-center"
         >
           전송
         </button>
