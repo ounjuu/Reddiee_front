@@ -42,7 +42,7 @@ export default function HomePage() {
         />
       </div>
       <div
-        className="pt-[72px] h-screen flex items-center justify-center overflow-x-hidden bg-pink-200"
+        className="pt-[72px] h-screen flex items-center justify-center overflow-x-hidden bg-blue-300"
         ref={section2Ref}
       >
         <img
