@@ -145,71 +145,82 @@ export default function AdminChatPage() {
     );
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto p-4 pt-[100px]">
-      <div className="flex mb-4 space-x-2">
-        {chatRooms.map((roomId) => (
-          <button
-            key={roomId}
-            onClick={() => setSelectedRoom(roomId)}
-            className={`px-3 py-1 rounded ${
-              selectedRoom === roomId
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-800"
-            }`}
-          >
-            방 #{roomId}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white">
-        {messages.length === 0 && (
-          <p className="text-center text-gray-500">채팅이 없습니다.</p>
-        )}
-
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`mb-2 flex ${
-              msg.user1?.id === user?.id ? "justify-end" : "justify-start"
-            }`}
-          >
-            <div
-              className={`px-3 py-1 rounded-lg max-w-xs break-words ${
-                msg.user1.id === user?.id
-                  ? "bg-red-400 text-white"
-                  : "bg-gray-200 text-gray-900"
-              }`}
-            >
-              <p className="text-xs font-semibold">
-                {msg.user1.nickName} ({msg.user1.role})
-              </p>
-              <p>{msg.content}</p>
-              <p className="text-xs text-gray-400 text-right">
-                {new Date(msg.createdAt).toLocaleTimeString()}
-              </p>
-            </div>
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="flex">
-        <input
-          type="text"
-          className="flex-1 border rounded px-3 py-2 mr-2"
-          placeholder="메시지를 입력하세요"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button
-          onClick={sendMessage}
-          className="bg-reddieetext text-white px-3 py-1 rounded hover:bg-red-600"
+    <>
+      <div className="flex justify-between h-screen p-4 pt-[100px] w-screen">
+        <div
+          className="flex text-reddieetext"
+          onClick={() => router.push("admin/addproduct")}
         >
-          전송
-        </button>
+          {"상품 등록 페이지 >"}
+        </div>
+        <div className="flex flex-col  max-w-3xl">
+          <div className="flex mb-4 space-x-2">
+            {chatRooms.map((roomId) => (
+              <button
+                key={roomId}
+                onClick={() => setSelectedRoom(roomId)}
+                className={`px-3 py-1 rounded ${
+                  selectedRoom === roomId
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                방 #{roomId}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white">
+            {messages.length === 0 && (
+              <p className="text-center text-gray-500">채팅이 없습니다.</p>
+            )}
+
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`mb-2 flex ${
+                  msg.user1?.id === user?.id ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`px-3 py-1 rounded-lg max-w-xs break-words ${
+                    msg.user1.id === user?.id
+                      ? "bg-red-400 text-white"
+                      : "bg-gray-200 text-gray-900"
+                  }`}
+                >
+                  <p className="text-xs font-semibold">
+                    {msg.user1.nickName} ({msg.user1.role})
+                  </p>
+                  <p>{msg.content}</p>
+                  <p className="text-xs text-gray-400 text-right">
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="flex">
+            <input
+              type="text"
+              className="flex-1 border rounded px-3 py-2 mr-2"
+              placeholder="메시지를 입력하세요"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            />
+            <button
+              onClick={sendMessage}
+              className="bg-reddieetext text-white px-3 py-1 rounded hover:bg-red-600"
+            >
+              전송
+            </button>
+          </div>
+        </div>
+        <div className="flex"></div>
       </div>
-    </div>
+    </>
   );
 }
