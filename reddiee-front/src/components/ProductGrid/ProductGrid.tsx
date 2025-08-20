@@ -13,7 +13,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
   const [liked, setLiked] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalInput, setModalInput] = useState(1); // 모달에서 입력한 수량
+  const [modalInput, setModalInput] = useState<number>(1); // 모달에서 입력한 수량
 
   const openModal = () => {
     setModalInput(cartCount > 0 ? cartCount : 1); // 기존 장바구니 수량으로 초기화
@@ -84,7 +84,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                         type="number"
                         min="1"
                         value={modalInput}
-                        onChange={(e) => setModalInput(e.target.value)}
+                        onChange={(e) => setModalInput(Number(e.target.value))}
                         className="w-full p-2 border border-gray-300 rounded mb-4 text-center"
                       />
                       <div className="flex justify-end space-x-2">
