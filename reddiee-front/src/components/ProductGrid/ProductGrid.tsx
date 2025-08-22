@@ -1,5 +1,6 @@
 import { ShoppingCart, Heart } from "lucide-react";
 import { useState } from "react";
+import { useUserStore } from "@/stores/useUserStore";
 
 interface Product {
   id: number;
@@ -10,12 +11,19 @@ interface Product {
 }
 
 export default function ProductGrid({ products }: { products: Product[] }) {
+  // 유저
+  const user = useUserStore((state) => state.user);
+
   const [liked, setLiked] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInput, setModalInput] = useState<number>(1); // 모달에서 입력한 수량
 
   const openModal = () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     setModalInput(cartCount > 0 ? cartCount : 1); // 기존 장바구니 수량으로 초기화
     setIsModalOpen(true);
   };
