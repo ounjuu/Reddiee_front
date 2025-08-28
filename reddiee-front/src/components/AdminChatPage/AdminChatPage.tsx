@@ -147,13 +147,17 @@ export default function AdminChatPage() {
   return (
     <>
       <div className="flex justify-between h-screen p-4 pt-[100px] w-screen">
-        <div
-          className="flex text-reddieetext"
-          onClick={() => router.push("admin/addproduct")}
-        >
-          {"상품 등록 페이지 >"}
+        {/* 왼쪽 영역 */}
+        <div className="flex-1 flex justify-start">
+          <div
+            onClick={() => router.push("admin/addproduct")}
+            className="self-start cursor-pointer px-4 py-2 rounded-lg bg-reddieetext text-white font-medium shadow-md hover:bg-red-600 transition-colors "
+          >
+            상품 등록 페이지 &gt;
+          </div>
         </div>
-        <div className="flex flex-col  max-w-3xl">
+        {/* 가운데 영역 */}
+        <div className="flex-1 flex flex-col max-w-3xl mx-auto">
           <div className="flex mb-4 space-x-2">
             {chatRooms.map((roomId) => (
               <button
@@ -219,7 +223,8 @@ export default function AdminChatPage() {
             </button>
           </div>
         </div>
-        <div className="flex"></div>
+        {/* 오른쪽 영역 */}
+        <div className="flex-1 flex justify-end"></div>
       </div>
     </>
   );
