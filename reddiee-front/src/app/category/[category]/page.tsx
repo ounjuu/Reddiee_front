@@ -30,7 +30,9 @@ export default function CategoryPage() {
 
   return (
     <div className="pt-[100px] px-[30px]">
-      <h1 className="text-2xl font-bold capitalize mb-6">{category}</h1>
+      <h1 className="text-2xl font-bold capitalize mb-6 text-reddieetext">
+        {category}
+      </h1>
       {products.length > 0 ? (
         <ProductGrid products={products} />
       ) : (
