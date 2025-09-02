@@ -29,6 +29,7 @@ type ChatRoom = {
   user1?: { id: number; nickName: string };
   user2?: { id: number; nickName: string };
   lastMessage?: string | null;
+  lastSenderNick?: string | null;
 };
 
 export default function AdminChatPage() {
@@ -154,15 +155,16 @@ export default function AdminChatPage() {
       </div>
     );
 
+  console.log(chatRooms, "chatRooms");
   return (
     <div className="flex justify-between h-screen p-4 pt-[100px] w-screen">
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex justify-start">
         <div
           onClick={() => router.push("admin/addproduct")}
-          className="self-start cursor-pointer px-4 py-2 rounded-lg bg-reddieetext text-white font-medium shadow-md hover:bg-red-600 transition-colors "
+          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
         >
-          상품 등록 페이지 &gt;
+          상품 등록 페이지 가기 &gt;
         </div>
       </div>
 
@@ -180,10 +182,8 @@ export default function AdminChatPage() {
                   : "bg-gray-200 text-gray-800"
               }`}
             >
-              방 #{room.id}{" "}
-              {room.lastMessage && (
-                <span className="text-xs">({room.lastMessage})</span>
-              )}
+              방 #{room.id} {room.lastSenderNick && `(${room.lastSenderNick})`}
+              {room.lastMessage && `: ${room.lastMessage}`}
             </button>
           ))}
         </div>
