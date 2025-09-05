@@ -1,16 +1,11 @@
 "use client";
+import ContactForm from "@/components/ForCustomer/ContactForm";
 
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import axiosInstance from "@/lib/axiosInstance";
-
-export default function CategoryPage() {
-  const params = useParams();
-
+export default function CustomerPage() {
   return (
-    <div className="pt-[100px] px-[30px]">
-      <div className="flex items-center justify-center h-[50vh]">
-        <p className="text-reddieetext text-lg font-semibold">For Customer</p>
+    <div className="flex justify-center pt-[100px]">
+      <div className="flex items-center justify-center ">
+        <ContactForm />
       </div>
     </div>
   );
