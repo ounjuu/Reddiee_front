@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { useUserStore } from "@/stores/useUserStore"; // 경로 맞게 수정하세요
 
 const ContactForm = () => {
+  const { user } = useUserStore(); // zustand에서 로그인 정보 가져오기
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -10,8 +12,15 @@ const ContactForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기서 Axios 등으로 백엔드 API 요청 가능
-    console.log({ name, email, message });
+
+    // 로그인 여부 체크
+    if (!user) {
+      alert("로그인 후 이용해주세요.");
+      return;
+    }
+
+    // 로그인 되어있을 때만 실행
+    console.log({ name, email, message, user });
     setSubmitted(true);
     setName("");
     setEmail("");
