@@ -18,9 +18,13 @@ const ContactForm = () => {
       alert("로그인 후 이용해주세요.");
       return;
     }
-
     // 로그인 되어있을 때만 실행
     console.log({ name, email, message, user });
+    setSubmitted(true);
+
+    // alert 추가
+    alert("문의가 정상적으로 제출되었습니다.");
+
     setSubmitted(true);
     setName("");
     setEmail("");
