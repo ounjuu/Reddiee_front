@@ -7,7 +7,7 @@ interface Product {
   id: number;
   name: string;
   price: string;
-  image: string;
+  imageUrl: string;
 }
 
 interface CartItem {
@@ -19,15 +19,28 @@ interface CartItem {
 export default function Cart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
 
   // 장바구니 불러오기
   const fetchCart = async () => {
     try {
       setLoading(true);
-      const res = await axiosInstance.get("/carts", { withCredentials: true });
-      setCartItems(res.data);
-    } catch (err) {
-      console.error(err);
+      setNotLoggedIn(false);
+
+      const res = await axiosInstance.get("/carts");
+      // res.data.items가 배열인지 확인 후 세팅
+      const items = Array.isArray(res.data.items) ? res.data.items : [];
+      setCartItems(items);
+
+      console.log(res.data, "?카트");
+    } catch (err: any) {
+      // 로그인 안됨
+      if (err.response?.status === 401) {
+        setNotLoggedIn(true);
+        setCartItems([]);
+      } else {
+        console.error(err);
+      }
     } finally {
       setLoading(false);
     }
@@ -40,11 +53,7 @@ export default function Cart() {
   // 수량 변경
   const updateQuantity = async (productId: number, quantity: number) => {
     try {
-      await axiosInstance.patch(
-        `/carts/${productId}`,
-        { quantity },
-        { withCredentials: true }
-      );
+      await axiosInstance.patch(`/carts/${productId}`, { quantity });
       setCartItems((prev) =>
         prev.map((item) =>
           item.product.id === productId ? { ...item, quantity } : item
@@ -58,9 +67,7 @@ export default function Cart() {
   // 아이템 삭제
   const removeItem = async (productId: number) => {
     try {
-      await axiosInstance.delete(`/carts/${productId}`, {
-        withCredentials: true,
-      });
+      await axiosInstance.delete(`/carts/${productId}`);
       setCartItems((prev) =>
         prev.filter((item) => item.product.id !== productId)
       );
@@ -72,20 +79,32 @@ export default function Cart() {
   // 전체 삭제
   const clearCart = async () => {
     try {
-      await axiosInstance.delete("/carts", { withCredentials: true });
+      await axiosInstance.delete("/carts/clear");
       setCartItems([]);
     } catch (err) {
       console.error(err);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl font-bold">
+        로딩중...
+      </div>
+    );
+
+  if (notLoggedIn)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl font-bold">
+        장바구니를 보려면 로그인해주세요.
+      </div>
+    );
 
   return (
     <div className="p-6">
       <h1 className="text-2xl mb-4">장바구니</h1>
 
-      {cartItems.length === 0 ? (
+      {!Array.isArray(cartItems) || cartItems.length === 0 ? (
         <p>장바구니가 비어있습니다.</p>
       ) : (
         <>
@@ -93,7 +112,7 @@ export default function Cart() {
             {cartItems.map((item) => (
               <div key={item.id} className="border p-4 rounded shadow">
                 <img
-                  src={item.product.image}
+                  src={`${process.env.NEXT_PUBLIC_API_URL}${item.product.imageUrl}`}
                   alt={item.product.name}
                   className="w-full h-32 object-cover mb-2"
                 />

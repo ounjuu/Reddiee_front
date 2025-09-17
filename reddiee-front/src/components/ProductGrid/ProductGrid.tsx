@@ -25,13 +25,23 @@ export default function ProductGrid({ products }: { products: Product[] }) {
   // 서버에서 장바구니 불러오기
   useEffect(() => {
     if (!user) return;
-    axiosInstance.get("/carts").then((res) => {
-      const counts: { [id: number]: number } = {};
-      res.data.forEach((item: any) => {
-        counts[item.product.id] = item.quantity;
+
+    axiosInstance
+      .get("/carts")
+      .then((res) => {
+        const items = Array.isArray(res.data.items) ? res.data.items : [];
+        const counts: { [id: number]: number } = {};
+
+        items.forEach((item: any) => {
+          counts[item.product.id] = item.quantity;
+        });
+
+        setCartCounts(counts);
+      })
+      .catch((err) => {
+        console.error(err);
+        setCartCounts({});
       });
-      setCartCounts(counts);
-    });
   }, [user]);
 
   const openModal = (productId: number) => {
