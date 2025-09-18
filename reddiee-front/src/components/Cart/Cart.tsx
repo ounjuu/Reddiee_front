@@ -88,14 +88,14 @@ export default function Cart() {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen text-xl font-bold">
-        로딩중...
+      <div className="flex justify-center items-center min-h-[calc(100vh-100px)] text-xm font-bold">
+        Loading...
       </div>
     );
 
   if (notLoggedIn)
     return (
-      <div className="flex justify-center items-center min-h-screen text-xl font-bold">
+      <div className="flex justify-center items-center min-h-[calc(100vh-100px)] text-xm font-bold">
         장바구니를 보려면 로그인해주세요.
       </div>
     );
