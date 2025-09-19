@@ -126,9 +126,18 @@ export default function Cart() {
                     type="number"
                     min={1}
                     value={item.quantity}
-                    onChange={(e) =>
-                      updateQuantity(item.product.id, Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "") {
+                        // 입력 중일 때는 서버 호출 X
+                        return;
+                      }
+                      updateQuantity(item.product.id, Number(value));
+                    }}
+                    onBlur={(e) => {
+                      const num = Math.max(1, Number(e.target.value));
+                      updateQuantity(item.product.id, num);
+                    }}
                     className="border w-16 p-1"
                   />
                   <button
