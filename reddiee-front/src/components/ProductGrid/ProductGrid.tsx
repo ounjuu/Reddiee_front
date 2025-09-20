@@ -144,7 +144,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                     취소
                   </button>
                   <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="px-4 py-2 bg-reddieetext text-white rounded hover:bg-blue-600"
                     onClick={() => handleConfirm(product.id)}
                   >
                     확인
