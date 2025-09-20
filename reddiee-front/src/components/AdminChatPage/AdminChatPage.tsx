@@ -161,7 +161,7 @@ export default function AdminChatPage() {
       {/* 왼쪽 영역 */}
       <div className="flex-1 flex justify-start">
         <div
-          onClick={() => router.push("admin/addproduct")}
+          onClick={() => router.push("/admin/addproduct")}
           className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
         >
           상품 등록 페이지 가기 &gt;
