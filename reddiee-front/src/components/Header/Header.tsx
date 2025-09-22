@@ -137,27 +137,52 @@ export default function Header() {
   `}
       >
         <div className="p-4 flex flex-col justify-between items-start gap-4 cursor-pointer">
-          <Link href="/category/caps">
+          <Link
+            href="/category/caps"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
             <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
               Caps
             </span>
           </Link>
-          <Link href="/category/bags">
+          <Link
+            href="/category/bags"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
             <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
               Bags
             </span>
           </Link>
-          <Link href="/category/apparel">
+          <Link
+            href="/category/apparel"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
             <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
               Apparel
             </span>
           </Link>
-          <Link href="/category/acc">
+          <Link
+            href="/category/acc"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
             <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
               ACC
             </span>
           </Link>
-          <Link href="/customer">
+          <Link
+            href="/customer"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
             <span className="text-lg font-bold hover:text-red-500 cursor-pointer">
               For Customer
             </span>
