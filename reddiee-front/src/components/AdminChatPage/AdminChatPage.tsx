@@ -142,7 +142,7 @@ export default function AdminChatPage() {
     socket.emit("message", {
       chatRoomId: selectedRoom,
       senderId: user.id,
-      message: input.trim(),
+      content: input.trim(),
     });
 
     setInput("");

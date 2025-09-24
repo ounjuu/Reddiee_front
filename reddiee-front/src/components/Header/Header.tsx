@@ -6,6 +6,7 @@ import { ShoppingCart, LogIn, User, Shield, LogOut } from "lucide-react";
 import { useUserStore } from "@/stores/useUserStore";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const titanOne = Titan_One({
   subsets: ["latin"], // 라틴 문자 지원
@@ -27,9 +28,10 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    clearUser(); // 상태 초기화
+    clearUser(); // Zustand 상태 초기화
+    Cookies.remove("access_token"); // 쿠키 삭제
     alert("로그아웃 되었습니다.");
-    router.refresh(); // 현재 페이지 강제 리렌더링
+    router.push("/login"); // 로그인 페이지로 이동
   };
 
   return (
