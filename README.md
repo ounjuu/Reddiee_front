@@ -57,3 +57,16 @@ Next.js(프론트엔드), Nest.js(백엔드), Socket.io, MySQL을 활용하여 �
 ### 📝 추가 예정
 - 마이페이지
 - 결제 기능
+
+---
+1. 환경 변수 설정
+NEXT_PUBLIC_API_URL=http://localhost:5000
+
+2. 백엔드 실행
+npm install
+npm run start:dev
+
+3. 프론트엔드 실행
+cd reddiee-front
+npm install
+npm run dev
