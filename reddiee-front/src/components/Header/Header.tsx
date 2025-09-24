@@ -27,9 +27,9 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    clearUser();
+    clearUser(); // 상태 초기화
     alert("로그아웃 되었습니다.");
-    router.push("/"); // 홈으로 이동하거나 필요에 따라 로그인 페이지로 이동
+    router.refresh(); // 현재 페이지 강제 리렌더링
   };
 
   return (
