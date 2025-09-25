@@ -159,12 +159,24 @@ export default function AdminChatPage() {
   return (
     <div className="flex justify-between h-screen p-4 pt-[100px] w-screen">
       {/* 왼쪽 영역 */}
-      <div className="flex-1 flex justify-start">
+      <div className="flex-1 flex justify-start flex-col space-y-4">
         <div
           onClick={() => router.push("/admin/addproduct")}
           className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
         >
           상품 등록 페이지 가기 &gt;
+        </div>
+        <div
+          onClick={() => router.push("/admin/admininquiries")}
+          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
+        >
+          문의사항 관리 페이지 가기 &gt;
+        </div>
+        <div
+          onClick={() => router.push("/admin/productlist")}
+          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
+        >
+          제품 리스트 페이지 가기 &gt;
         </div>
       </div>
 
