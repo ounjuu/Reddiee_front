@@ -31,16 +31,32 @@ export default function ProductGrid({ products }: { products: Product[] }) {
       .then((res) => {
         const items = Array.isArray(res.data.items) ? res.data.items : [];
         const counts: { [id: number]: number } = {};
-
         items.forEach((item: any) => {
           counts[item.product.id] = item.quantity;
         });
-
         setCartCounts(counts);
       })
       .catch((err) => {
         console.error(err);
         setCartCounts({});
+      });
+    // 좋아요 불러오기
+    axiosInstance
+      .get("/likes/me")
+      .then((res) => {
+        // 응답 예시: [{ id: 1, product: { id: 5, ... }, created_at: ... }]
+        const likes = res.data;
+        const liked: { [id: number]: boolean } = {};
+
+        likes.forEach((like: any) => {
+          liked[like.product.id] = true; // ✅ productId 직접 접근
+        });
+
+        setLikedItems(liked);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLikedItems({});
       });
   }, [user]);
 
@@ -112,12 +128,33 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                     ? "bg-red-500 text-white"
                     : "bg-gray-200 hover:bg-gray-300"
                 }`}
-                onClick={() =>
-                  setLikedItems((prev) => ({
-                    ...prev,
-                    [product.id]: !prev[product.id],
-                  }))
-                }
+                onClick={async () => {
+                  if (!user) {
+                    alert("로그인이 필요합니다.");
+                    return;
+                  }
+
+                  try {
+                    if (likedItems[product.id]) {
+                      // 이미 좋아요 → 취소 요청
+                      await axiosInstance.delete(`/likes/${product.id}`);
+                      setLikedItems((prev) => ({
+                        ...prev,
+                        [product.id]: false,
+                      }));
+                    } else {
+                      // 좋아요 추가
+                      await axiosInstance.post(`/likes/${product.id}`);
+                      setLikedItems((prev) => ({
+                        ...prev,
+                        [product.id]: true,
+                      }));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert("좋아요 처리 실패");
+                  }
+                }}
               >
                 <Heart size={20} />
               </button>
