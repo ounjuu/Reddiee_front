@@ -105,7 +105,7 @@ export default function InquiriesPage() {
                       </span>
                     ) : (
                       <button
-                        className="px-3 py-1 bg-green-500 text-white rounded"
+                        className="px-3 py-1 bg-blue-500 text-white rounded"
                         onClick={() => handleMarkDone(inq.id)}
                       >
                         처리완료
