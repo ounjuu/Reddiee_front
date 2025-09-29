@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axiosInstance from "@/lib/axiosInstance";
+import { ShoppingCart } from "lucide-react";
 
 export default function MyPage() {
   const [keyword, setKeyword] = useState("");
+  const [likedProducts, setLikedProducts] = useState<any[]>([]);
+  const [cartCounts, setCartCounts] = useState<{ [id: number]: number }>({});
+  const [openModalId, setOpenModalId] = useState<number | null>(null);
+  const [modalInput, setModalInput] = useState<number>(1);
 
   const recentOrders = [
     {
@@ -29,6 +35,46 @@ export default function MyPage() {
     },
   ];
 
+  // ✅ 좋아요 상품 불러오기 + 장바구니 불러오기
+  useEffect(() => {
+    axiosInstance
+      .get("/likes/me")
+      .then((res) => setLikedProducts(res.data))
+      .catch((err) => console.error("좋아요 불러오기 실패:", err));
+
+    axiosInstance
+      .get("/carts")
+      .then((res) => {
+        const items = Array.isArray(res.data.items) ? res.data.items : [];
+        const counts: { [id: number]: number } = {};
+        items.forEach((item: any) => {
+          counts[item.product.id] = item.quantity;
+        });
+        setCartCounts(counts);
+      })
+      .catch(() => setCartCounts({}));
+  }, []);
+
+  const openModal = (productId: number) => {
+    setModalInput(cartCounts[productId] || 1);
+    setOpenModalId(productId);
+  };
+  const closeModal = () => setOpenModalId(null);
+
+  const handleConfirm = async (productId: number) => {
+    try {
+      await axiosInstance.post("/carts", {
+        productId,
+        quantity: modalInput,
+      });
+      setCartCounts((prev) => ({ ...prev, [productId]: modalInput }));
+      closeModal();
+    } catch (err) {
+      console.error(err);
+      alert("장바구니 저장 실패");
+    }
+  };
+
   return (
     <div className="w-full mx-auto max-w-[1000px] px-4 py-8">
       {/* 헤더 */}
@@ -43,18 +89,6 @@ export default function MyPage() {
         <SummaryBox title="쿠폰" value="3장" />
         <SummaryBox title="주문" value="27건" />
         <SummaryBox title="리뷰" value="11개" />
-      </div>
-
-      {/* 검색 */}
-      <div className="flex gap-2 mb-8">
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="주문번호, 상품명 검색"
-          className="border rounded px-3 py-2 flex-1"
-        />
-        <button className="border rounded px-4 py-2 bg-gray-100">검색</button>
       </div>
 
       {/* 최근 주문 */}
@@ -81,25 +115,80 @@ export default function MyPage() {
         </div>
       </div>
 
-      {/* 배송지 & 결제수단 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <div className="border rounded p-4">
-          <h3 className="font-semibold mb-2">기본 배송지</h3>
-          <p className="text-sm">서울특별시 성동구 성수일로 99, 101동 1203호</p>
-          <p className="text-sm text-gray-500">홍길동 · 010-1234-5678</p>
-          <button className="mt-2 text-sm border rounded px-3 py-1 bg-gray-50">
-            배송지 관리
-          </button>
-        </div>
-        <div className="border rounded p-4">
-          <h3 className="font-semibold mb-2">결제 수단</h3>
-          <p className="text-sm">토스카드 (**** 1234)</p>
-          <p className="text-sm text-gray-500">간편결제 사용중</p>
-          <button className="mt-2 text-sm border rounded px-3 py-1 bg-gray-50">
-            결제수단 관리
-          </button>
-        </div>
+      {/* 좋아요 상품 */}
+      <div className="mt-10">
+        <h2 className="text-xl font-semibold mb-4">내가 찜한 상품</h2>
+        {likedProducts.length === 0 ? (
+          <p className="text-gray-500">아직 좋아요한 상품이 없습니다.</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {likedProducts.map((like: any) => (
+              <div
+                key={like.id}
+                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
+              >
+                <img
+                  src={`${process.env.NEXT_PUBLIC_API_URL}${like.product.imageUrl}`}
+                  alt={like.product.name}
+                  className="w-full h-40 object-contain p-4"
+                />
+                <div className="p-3 flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">{like.product.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {like.product.price.toLocaleString()}원
+                    </p>
+                  </div>
+                  {/* 장바구니 버튼 */}
+                  <div className="relative">
+                    <button
+                      className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+                      onClick={() => openModal(like.product.id)}
+                    >
+                      <ShoppingCart size={18} />
+                    </button>
+                    {cartCounts[like.product.id] > 0 && (
+                      <span className="absolute -top-2 -right-2 w-4 h-4 text-xs flex items-center justify-center bg-red-500 text-white rounded-full">
+                        {cartCounts[like.product.id]}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* 모달 */}
+      {openModalId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-72">
+            <h2 className="text-lg font-semibold mb-4">수량 선택</h2>
+            <input
+              type="number"
+              min="1"
+              value={modalInput}
+              onChange={(e) => setModalInput(Number(e.target.value))}
+              className="w-full p-2 border border-gray-300 rounded mb-4 text-center"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={closeModal}
+              >
+                취소
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={() => handleConfirm(openModalId)}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
