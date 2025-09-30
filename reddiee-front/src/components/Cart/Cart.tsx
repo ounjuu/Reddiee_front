@@ -21,6 +21,26 @@ export default function Cart() {
   const [loading, setLoading] = useState(true);
   const [notLoggedIn, setNotLoggedIn] = useState(false);
 
+  // 주문하기 버튼
+  const handleOrder = async () => {
+    try {
+      const res = await axiosInstance.post("/orders", {
+        items: cartItems.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+      });
+
+      alert("주문이 완료되었습니다!");
+      console.log(res.data);
+      // 주문 완료 후 장바구니 비우기
+      setCartItems([]);
+    } catch (err) {
+      console.error(err);
+      alert("주문에 실패했습니다.");
+    }
+  };
+
   // 장바구니 불러오기
   const fetchCart = async () => {
     try {
@@ -176,6 +196,12 @@ export default function Cart() {
               className="bg-red-600 text-white px-4 py-2 rounded"
             >
               장바구니 비우기
+            </button>
+            <button
+              onClick={handleOrder}
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              주문하기
             </button>
           </div>
         </>
