@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import ProductGrid from "@/components/ProductGrid/ProductGrid";
+import Link from "next/link";
 
 export default function CategoryPage() {
   const params = useParams();

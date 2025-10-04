@@ -4,6 +4,7 @@ import { ShoppingCart, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import axiosInstance from "@/lib/axiosInstance";
+import Link from "next/link";
 
 interface Product {
   id: number;
@@ -92,11 +93,16 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           key={product.id}
           className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
         >
-          <img
-            src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
-            alt={product.name}
-            className="w-full h-48 object-contain p-5"
-          />
+          <Link href={`/products/${product.id}`}>
+            <div>
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
+                alt={product.name}
+                className="w-full h-48 object-contain p-5"
+              />
+            </div>
+          </Link>
+
           <div className="p-4 flex justify-between">
             <div>
               <h2 className="text-lg font-semibold">{product.name}</h2>
