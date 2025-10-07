@@ -9,8 +9,8 @@ export default function ProductDetailPage() {
   const id = params.id as string;
 
   const [product, setProduct] = useState<any>(null);
-  const [liked, setLiked] = useState(false); // 좋아요 상태
-  const [loading, setLoading] = useState(false); // 버튼 중복 클릭 방지용
+  const [liked, setLiked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -19,6 +19,7 @@ export default function ProductDetailPage() {
       .get(`/products/${id}`)
       .then((res) => {
         setProduct(res.data);
+        setLiked(res.data.isLiked ?? false); // 백엔드에서 isLiked 같이 내려주면 좋음
       })
       .catch((err) => {
         console.error("상품 상세 불러오기 실패", err);
@@ -27,8 +28,20 @@ export default function ProductDetailPage() {
   }, [id]);
 
   /** ✅ 좋아요 토글 */
-  const handleLike = () => {
-    setLiked((prev) => !prev);
+  const handleLike = async () => {
+    if (!product) return;
+
+    try {
+      setLiked((prev) => !prev);
+      if (!liked) {
+        await axiosInstance.post(`/likes/${product.id}`);
+      } else {
+        await axiosInstance.delete(`/likes/${product.id}`);
+      }
+    } catch (err) {
+      console.error("좋아요 처리 실패", err);
+      alert("좋아요 처리에 실패했습니다.");
+    }
   };
 
   /** ✅ 장바구니 담기 */
@@ -70,21 +83,18 @@ export default function ProductDetailPage() {
       </h1>
 
       <div className="flex gap-8">
-        {/* 이미지 */}
         <img
           src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
           alt={product.name}
           className="w-[300px] h-[300px] object-cover rounded-xl shadow-md"
         />
 
-        {/* 정보 영역 */}
         <div>
           <p className="text-xl font-semibold text-gray-800 mb-4">
             ₩{product.price.toLocaleString()}
           </p>
           <p className="text-gray-600 mb-6">{product.description}</p>
 
-          {/* ✅ 버튼 영역 */}
           <div className="flex items-center gap-4">
             {/* 좋아요 버튼 */}
             <button
@@ -95,10 +105,10 @@ export default function ProductDetailPage() {
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              {liked ? "좋아요 취소" : "좋아요"}
+              {liked ? "❤️ 좋아요 취소" : "🤍 좋아요"}
             </button>
 
-            {/* 장바구니 담기 버튼 */}
+            {/* 장바구니 담기 */}
             <button
               onClick={handleAddToCart}
               disabled={loading}
