@@ -18,7 +18,6 @@ export default function ProductDetailPage() {
   const [openModal, setOpenModal] = useState(false);
   const [modalInput, setModalInput] = useState<number>(1);
 
-  // ✅ 상품 상세 및 좋아요, 장바구니 정보 불러오기
   useEffect(() => {
     if (!id) return;
 
@@ -34,32 +33,25 @@ export default function ProductDetailPage() {
 
         setProduct(productRes.data);
 
-        // 좋아요 여부
         const likedProductIds = likesRes.data.map(
           (like: any) => like.product.id
         );
         setLiked(likedProductIds.includes(Number(id)));
 
-        // 장바구니 수량
         const foundCart = cartRes.data.items?.find(
           (item: any) => item.product.id === Number(id)
         );
         setCartCount(foundCart ? foundCart.quantity : 0);
       } catch (err) {
         console.error("상품 상세 불러오기 실패", err);
-        setProduct(null);
       }
     };
 
     fetchData();
   }, [id, user]);
 
-  /** ✅ 좋아요 토글 */
   const handleLike = async () => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+    if (!user) return alert("로그인이 필요합니다.");
 
     try {
       if (liked) {
@@ -69,23 +61,17 @@ export default function ProductDetailPage() {
         await axiosInstance.post(`/likes/${id}`);
         setLiked(true);
       }
-    } catch (err) {
-      console.error("좋아요 처리 실패", err);
-      alert("좋아요 처리 중 오류가 발생했습니다.");
+    } catch {
+      alert("좋아요 처리 실패");
     }
   };
 
-  /** ✅ 장바구니 버튼 클릭 → 수량 선택 모달 */
   const openCartModal = () => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+    if (!user) return alert("로그인이 필요합니다.");
     setModalInput(cartCount || 1);
     setOpenModal(true);
   };
 
-  /** ✅ 장바구니 확인 */
   const handleConfirm = async () => {
     try {
       setLoading(true);
@@ -96,47 +82,51 @@ export default function ProductDetailPage() {
       setCartCount(modalInput);
       alert("장바구니에 담겼습니다!");
       setOpenModal(false);
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("장바구니 담기 실패");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!product) {
+  if (!product)
     return (
-      <div className="flex items-center justify-center h-[50vh]">
+      <div className="flex items-center justify-center h-[60vh]">
         <p className="text-lg font-semibold text-reddieetext">
           상품 정보를 불러올 수 없습니다.
         </p>
       </div>
     );
-  }
 
   return (
-    <div className="pt-[100px] px-[30px]">
-      <h1 className="text-3xl font-bold text-reddieetext mb-6">
-        {product.name}
-      </h1>
+    <div className="pt-[120px] px-6 md:px-20">
+      {/* ✅ 전체 정렬 */}
+      <div className="flex flex-col md:flex-row md:items-start md:gap-12">
+        {/* ✅ 이미지 섹션 */}
+        <div className="flex justify-center md:w-1/2">
+          <img
+            src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
+            alt={product.name}
+            className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] object-cover rounded-xl shadow-md"
+          />
+        </div>
 
-      <div className="flex gap-8 flex-col md:flex-row">
-        <img
-          src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
-          alt={product.name}
-          className="w-[300px] h-[300px] object-cover rounded-xl shadow-md mx-auto"
-        />
-
-        <div className="flex flex-col justify-between">
+        {/* ✅ 오른쪽 상품 정보 섹션 */}
+        <div className="flex flex-col justify-between md:w-1/2 mt-8 md:mt-0">
           <div>
-            <p className="text-xl font-semibold text-gray-800 mb-4">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+              {product.name}
+            </h1>
+            <p className="text-2xl font-semibold text-reddieetext mb-6">
               ₩{product.price.toLocaleString()}
             </p>
-            <p className="text-gray-600 mb-6">{product.description}</p>
+            <p className="text-gray-600 leading-relaxed border-t pt-4">
+              {product.description}
+            </p>
           </div>
 
           {/* ✅ 버튼 영역 */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mt-8">
             {/* 좋아요 버튼 */}
             <button
               onClick={handleLike}
@@ -167,11 +157,13 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* ✅ 모달 */}
+      {/* ✅ 수량 모달 */}
       {openModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-72">
-            <h2 className="text-lg font-semibold mb-4">수량 선택</h2>
+          <div className="bg-white p-6 rounded-xl shadow-lg w-72">
+            <h2 className="text-lg font-semibold mb-4 text-center">
+              수량 선택
+            </h2>
             <input
               type="number"
               min="1"
@@ -187,7 +179,7 @@ export default function ProductDetailPage() {
                 취소
               </button>
               <button
-                className="px-4 py-2 bg-reddieetext text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                className="px-4 py-2 bg-reddieetext text-white rounded hover:bg-red-600 disabled:opacity-50"
                 onClick={handleConfirm}
                 disabled={loading}
               >
