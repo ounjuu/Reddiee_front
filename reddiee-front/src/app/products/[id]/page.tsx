@@ -107,7 +107,7 @@ export default function ProductDetailPage() {
           <img
             src={`${process.env.NEXT_PUBLIC_API_URL}${product.imageUrl}`}
             alt={product.name}
-            className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] object-cover rounded-xl shadow-md"
+            className="w-full max-w-[400px] h-auto rounded-2xl shadow-md object-contain bg-white p-4"
           />
         </div>
 
