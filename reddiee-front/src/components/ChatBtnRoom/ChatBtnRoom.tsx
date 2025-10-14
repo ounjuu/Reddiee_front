@@ -127,7 +127,7 @@ export default function ChatBtnRoom({
 
   return (
     <div
-      className={`fixed bg-white w-[250px] xs:w-1/2 h-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg rounded flex flex-col ${
+      className={`fixed bg-white w-[250px] z-[9999] xs:w-1/2 h-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg rounded flex flex-col ${
         isOpen ? "" : "hidden"
       }`}
     >
