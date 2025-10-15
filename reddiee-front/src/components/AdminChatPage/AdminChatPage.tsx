@@ -37,14 +37,13 @@ export default function AdminChatPage() {
   const setUser = useUserStore((state) => state.setUser);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 사용자 인증
+  // ✅ 사용자 인증
   useEffect(() => {
     async function fetchUser() {
       const token = Cookies.get("access_token");
@@ -80,7 +79,7 @@ export default function AdminChatPage() {
     }
   }, [user, setUser, router]);
 
-  // 채팅방 목록 불러오기
+  // ✅ 채팅방 목록 불러오기
   useEffect(() => {
     if (loading) return;
 
@@ -95,7 +94,7 @@ export default function AdminChatPage() {
       .catch(console.error);
   }, [loading]);
 
-  // 방 선택 시 메시지 불러오기
+  // ✅ 메시지 불러오기
   useEffect(() => {
     if (!selectedRoom) return;
 
@@ -104,21 +103,15 @@ export default function AdminChatPage() {
     })
       .then((res) => res.json())
       .then((msgs) => {
-        if (Array.isArray(msgs)) {
-          setMessages(msgs);
-        } else if (msgs && msgs.data && Array.isArray(msgs.data)) {
-          // 혹시 { data: [...] } 형태라면
-          setMessages(msgs.data);
-        } else {
-          setMessages([]); // 잘못된 응답이면 빈 배열
-        }
+        if (Array.isArray(msgs)) setMessages(msgs);
+        else if (msgs?.data && Array.isArray(msgs.data)) setMessages(msgs.data);
+        else setMessages([]);
       })
       .catch((err) => {
         console.error("메시지 불러오기 실패:", err);
         setMessages([]);
       });
 
-    // 소켓 수신
     socket.on("message", (msg: Message) => {
       if (msg.chatRoom.id === selectedRoom) {
         setMessages((prev) => [...prev, msg]);
@@ -130,12 +123,12 @@ export default function AdminChatPage() {
     };
   }, [selectedRoom]);
 
-  // 스크롤 아래 고정
+  // ✅ 자동 스크롤
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 메시지 전송
+  // ✅ 메시지 전송
   const sendMessage = () => {
     if (!input.trim() || !user || !selectedRoom) return;
 
@@ -155,81 +148,93 @@ export default function AdminChatPage() {
       </div>
     );
 
-  console.log(chatRooms, "chatRooms");
   return (
-    <div className="flex justify-between h-screen p-4 pt-[100px] w-screen">
+    <div className="flex h-screen pt-[100px] bg-gray-50">
       {/* 왼쪽 영역 */}
-      <div className="flex-1 flex justify-start flex-col space-y-4">
-        <div
-          onClick={() => router.push("/admin/addproduct")}
-          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
-        >
-          상품 등록 페이지 가기 &gt;
-        </div>
-        <div
-          onClick={() => router.push("/admin/admininquiries")}
-          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
-        >
-          문의사항 관리 페이지 가기 &gt;
-        </div>
-        <div
-          onClick={() => router.push("/admin/productlist")}
-          className="self-start cursor-pointer px-4 py-2 rounded-lg text-reddieetext bg-white font-medium shadow-md hover:text-red-600 transition-colors border"
-        >
-          제품 리스트 페이지 가기 &gt;
-        </div>
+      <div className="w-1/4 p-6 border-r bg-white flex flex-col items-start space-y-6 overflow-y-auto">
+        {[
+          {
+            label: "상품 등록 페이지 가기",
+            path: "/admin/addproduct",
+            color: "from-red-100 to-red-50 hover:from-red-200",
+          },
+          {
+            label: "문의사항 관리 페이지 가기",
+            path: "/admin/admininquiries",
+            color: "from-blue-100 to-blue-50 hover:from-blue-200",
+          },
+          {
+            label: "제품 리스트 페이지 가기",
+            path: "/admin/productlist",
+            color: "from-green-100 to-green-50 hover:from-green-200",
+          },
+        ].map((item) => (
+          <div
+            key={item.path}
+            onClick={() => router.push(item.path)}
+            className={`w-full cursor-pointer rounded-2xl p-5 shadow-md bg-gradient-to-br ${item.color}
+              transition-all transform hover:-translate-y-1 hover:shadow-lg flex flex-col items-start justify-between border border-gray-200`}
+          >
+            <div className="text-lg font-semibold text-gray-800 mb-1">
+              {item.label}
+            </div>
+            <div className="text-sm text-gray-500 flex items-center gap-1">
+              이동하기 <span className="text-lg">→</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* 가운데 영역 */}
-      <div className="flex-1 flex flex-col max-w-3xl mx-auto">
-        {/* 채팅방 버튼 */}
-        <div className="flex mb-4 space-x-2">
+      <div className="w-2/4 flex flex-col px-6">
+        {/* 채팅방 목록 */}
+        <div className="flex mb-4 space-x-2 overflow-x-auto">
           {chatRooms.map((room) => (
             <button
               key={room.id}
               onClick={() => setSelectedRoom(room.id)}
-              className={`px-3 py-1 rounded ${
+              className={`px-3 py-1 rounded whitespace-nowrap ${
                 selectedRoom === room.id
                   ? "bg-reddieetext text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
             >
-              방 #{room.id} {room.lastSenderNick && `(${room.lastSenderNick})`}
+              방 #{room.id} {room.lastSenderNick && `(${room.lastSenderNick})`}{" "}
               {room.lastMessage && `: ${room.lastMessage}`}
             </button>
           ))}
         </div>
 
         {/* 메시지 영역 */}
-        <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white">
-          {messages.length === 0 && (
+        <div className="flex-1 overflow-y-auto border rounded p-4 mb-4 bg-white shadow-inner">
+          {messages.length === 0 ? (
             <p className="text-center text-gray-500">채팅이 없습니다.</p>
-          )}
-
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`mb-2 flex ${
-                msg.sender?.id === user?.id ? "justify-end" : "justify-start"
-              }`}
-            >
+          ) : (
+            messages.map((msg) => (
               <div
-                className={`px-3 py-1 rounded-lg max-w-xs break-words ${
-                  msg.sender?.id === user?.id
-                    ? "bg-red-400 text-white"
-                    : "bg-gray-200 text-gray-900"
+                key={msg.id}
+                className={`mb-2 flex ${
+                  msg.sender?.id === user?.id ? "justify-end" : "justify-start"
                 }`}
               >
-                <p className="text-xs font-semibold">
-                  {msg.sender?.nickName} ({msg.sender?.role})
-                </p>
-                <p>{msg.content}</p>
-                <p className="text-xs text-gray-400 text-right">
-                  {new Date(msg.createdAt).toLocaleTimeString()}
-                </p>
+                <div
+                  className={`px-3 py-1 rounded-lg max-w-xs break-words ${
+                    msg.sender?.id === user?.id
+                      ? "bg-red-400 text-white"
+                      : "bg-gray-200 text-gray-900"
+                  }`}
+                >
+                  <p className="text-xs font-semibold">
+                    {msg.sender?.nickName} ({msg.sender?.role})
+                  </p>
+                  <p>{msg.content}</p>
+                  <p className="text-xs text-gray-400 text-right">
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
           <div ref={messagesEndRef} />
         </div>
 
@@ -253,7 +258,9 @@ export default function AdminChatPage() {
       </div>
 
       {/* 오른쪽 영역 */}
-      <div className="flex-1 flex justify-end"></div>
+      <div className="w-1/4 bg-white border-l p-6 flex flex-col justify-center items-center text-gray-400">
+        (추후 관리자 정보나 통계 표시 예정)
+      </div>
     </div>
   );
 }
