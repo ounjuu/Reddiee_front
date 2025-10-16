@@ -156,30 +156,29 @@ export default function AdminChatPage() {
           {
             label: "상품 등록 페이지 가기",
             path: "/admin/addproduct",
-            color: "from-red-100 to-red-50 hover:from-red-200",
           },
           {
             label: "문의사항 관리 페이지 가기",
             path: "/admin/admininquiries",
-            color: "from-blue-100 to-blue-50 hover:from-blue-200",
           },
           {
             label: "제품 리스트 페이지 가기",
             path: "/admin/productlist",
-            color: "from-green-100 to-green-50 hover:from-green-200",
           },
         ].map((item) => (
           <div
             key={item.path}
             onClick={() => router.push(item.path)}
-            className={`w-full cursor-pointer rounded-2xl p-5 shadow-md bg-gradient-to-br ${item.color}
-              transition-all transform hover:-translate-y-1 hover:shadow-lg flex flex-col items-start justify-between border border-gray-200`}
+            className={`w-full cursor-pointer rounded-2xl p-5 shadow-md 
+        bg-gradient-to-br from-red-100 to-red-50 hover:from-red-300 hover:to-red-100
+        transition-all transform hover:-translate-y-1 hover:shadow-lg 
+        flex flex-col items-start justify-between border border-red-200`}
           >
-            <div className="text-lg font-semibold text-gray-800 mb-1">
+            <div className="text-base font-semibold text-red-800 mb-1">
               {item.label}
             </div>
-            <div className="text-sm text-gray-500 flex items-center gap-1">
-              이동하기 <span className="text-lg">→</span>
+            <div className="text-xs text-red-500 flex items-center gap-1">
+              이동하기 <span className="text-sm">→</span>
             </div>
           </div>
         ))}
