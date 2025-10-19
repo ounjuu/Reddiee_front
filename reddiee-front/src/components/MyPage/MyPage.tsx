@@ -10,6 +10,7 @@ export default function MyPage() {
   const [cartCounts, setCartCounts] = useState<{ [id: number]: number }>({});
   const [openModalId, setOpenModalId] = useState<number | null>(null);
   const [modalInput, setModalInput] = useState<number>(1);
+  const [loading, setLoading] = useState(true); // ✅ 로딩 상태 추가
 
   const recentOrders = [
     {
@@ -35,24 +36,33 @@ export default function MyPage() {
     },
   ];
 
-  // ✅ 좋아요 상품 불러오기 + 장바구니 불러오기
+  // ✅ 좋아요 상품 & 장바구니 불러오기
   useEffect(() => {
-    axiosInstance
-      .get("/likes/me")
-      .then((res) => setLikedProducts(res.data))
-      .catch((err) => console.error("좋아요 불러오기 실패:", err));
+    async function fetchData() {
+      try {
+        const [likesRes, cartsRes] = await Promise.all([
+          axiosInstance.get("/likes/me"),
+          axiosInstance.get("/carts"),
+        ]);
 
-    axiosInstance
-      .get("/carts")
-      .then((res) => {
-        const items = Array.isArray(res.data.items) ? res.data.items : [];
+        setLikedProducts(likesRes.data);
+
+        const items = Array.isArray(cartsRes.data.items)
+          ? cartsRes.data.items
+          : [];
         const counts: { [id: number]: number } = {};
         items.forEach((item: any) => {
           counts[item.product.id] = item.quantity;
         });
         setCartCounts(counts);
-      })
-      .catch(() => setCartCounts({}));
+      } catch (err) {
+        console.error("데이터 불러오기 실패:", err);
+      } finally {
+        setLoading(false); // ✅ 로딩 종료
+      }
+    }
+
+    fetchData();
   }, []);
 
   const openModal = (productId: number) => {
@@ -74,6 +84,16 @@ export default function MyPage() {
       alert("장바구니 저장 실패");
     }
   };
+
+  // ✅ 로딩 중 화면
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-gray-600">
+        <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mb-3"></div>
+        <p className="text-sm">불러오는 중...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full mx-auto max-w-[1000px] px-4 py-8">
@@ -139,7 +159,6 @@ export default function MyPage() {
                       {like.product.price.toLocaleString()}원
                     </p>
                   </div>
-                  {/* 장바구니 버튼 */}
                   <div className="relative">
                     <button
                       className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -162,7 +181,7 @@ export default function MyPage() {
 
       {/* 모달 */}
       {openModalId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-72">
             <h2 className="text-lg font-semibold mb-4">수량 선택</h2>
             <input
