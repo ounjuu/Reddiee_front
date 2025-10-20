@@ -10,7 +10,7 @@ export default function MyPage() {
   const [cartCounts, setCartCounts] = useState<{ [id: number]: number }>({});
   const [openModalId, setOpenModalId] = useState<number | null>(null);
   const [modalInput, setModalInput] = useState<number>(1);
-  const [loading, setLoading] = useState(true); // ✅ 로딩 상태 추가
+  const [loading, setLoading] = useState(true);
 
   const recentOrders = [
     {
