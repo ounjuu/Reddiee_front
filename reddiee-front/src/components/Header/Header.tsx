@@ -36,7 +36,7 @@ export default function Header() {
 
   return (
     <header
-      className="text-primary z-0 fixed top-0 left-0 w-screen"
+      className="text-primary z-0 fixed top-0 left-0 w-screen z-[9999]"
       ref={menuRef}
     >
       {/* 흘러가기 */}
