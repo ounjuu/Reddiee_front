@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
+import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 interface Product {
   id: number;
@@ -22,22 +23,58 @@ export default function Cart() {
   const [notLoggedIn, setNotLoggedIn] = useState(false);
 
   // 주문하기 버튼
+  // const handleOrder = async () => {
+  //   try {
+  //     const res = await axiosInstance.post("/orders", {
+  //       items: cartItems.map((item) => ({
+  //         productId: item.product.id,
+  //         quantity: item.quantity,
+  //       })),
+  //     });
+
+  //     alert("주문이 완료되었습니다!");
+  //     console.log(res.data);
+  //     // 주문 완료 후 장바구니 비우기
+  //     setCartItems([]);
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("주문에 실패했습니다.");
+  //   }
+  // };
   const handleOrder = async () => {
     try {
-      const res = await axiosInstance.post("/orders", {
+      if (cartItems.length === 0) {
+        alert("장바구니가 비어있습니다.");
+        return;
+      }
+
+      // 1️⃣ 주문 생성 요청 → 서버에서 orderId, amount 생성
+      const res = await axiosInstance.post("/payments/ready", {
         items: cartItems.map((item) => ({
           productId: item.product.id,
           quantity: item.quantity,
         })),
       });
 
-      alert("주문이 완료되었습니다!");
-      console.log(res.data);
-      // 주문 완료 후 장바구니 비우기
-      setCartItems([]);
+      const { orderId, amount, orderName, customerName } = res.data;
+
+      // 2️⃣ Toss SDK 로드
+      const tossPayments = await loadTossPayments(
+        process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!
+      );
+
+      // 3️⃣ 결제창 띄우기
+      await tossPayments.requestPayment("카드", {
+        amount,
+        orderId,
+        orderName,
+        customerName,
+        successUrl: `${window.location.origin}/payment/success`,
+        failUrl: `${window.location.origin}/payment/fail`,
+      });
     } catch (err) {
       console.error(err);
-      alert("주문에 실패했습니다.");
+      alert("결제 준비 중 오류가 발생했습니다.");
     }
   };
 
