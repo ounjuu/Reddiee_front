@@ -1,17 +1,21 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const paymentKey = searchParams.get("paymentKey");
   const orderId = searchParams.get("orderId");
   const amount = searchParams.get("amount");
-  const router = useRouter();
+
+  const [status, setStatus] = useState<"loading" | "success" | "fail">(
+    "loading"
+  );
 
   useEffect(() => {
     const confirmPayment = async () => {
@@ -21,43 +25,82 @@ export default function SuccessPage() {
           orderId,
           amount: Number(amount),
         });
-        alert("결제가 완료되었습니다!");
+        setStatus("success");
       } catch (err) {
         console.error(err);
-        alert("결제 승인 실패");
+        setStatus("fail");
       }
     };
     confirmPayment();
   }, []);
 
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white">
+        <p className="text-gray-500 text-lg font-medium animate-pulse">
+          결제 확인 중...
+        </p>
+      </div>
+    );
+  }
+
+  const isSuccess = status === "success";
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white animate-fadeIn">
-      <div className="bg-white shadow-md rounded-2xl p-8 max-w-md w-full text-center border border-gray-100 transition-all duration-300 hover:shadow-lg">
+    <div
+      className={`flex items-center justify-center min-h-screen ${
+        isSuccess
+          ? "bg-gradient-to-b from-blue-50 to-white"
+          : "bg-gradient-to-b from-red-50 to-white"
+      } animate-fadeIn`}
+    >
+      <div
+        className={`bg-white shadow-md rounded-2xl p-8 max-w-md w-full text-center border transition-all duration-300 hover:shadow-lg ${
+          isSuccess ? "border-gray-100" : "border-red-100"
+        }`}
+      >
         <div className="flex justify-center mb-4">
-          <CheckCircle className="text-green-500 w-16 h-16 animate-bounce-slow" />
+          {isSuccess ? (
+            <CheckCircle className="text-green-500 w-16 h-16 animate-bounce-slow" />
+          ) : (
+            <XCircle className="text-red-500 w-16 h-16 animate-bounce-slow" />
+          )}
         </div>
 
-        <h1 className="text-2xl font-semibold mb-2 text-gray-800">
-          결제가 완료되었습니다 🎉
+        <h1
+          className={`text-2xl font-semibold mb-2 ${
+            isSuccess ? "text-gray-800" : "text-red-700"
+          }`}
+        >
+          {isSuccess ? "결제가 완료되었습니다 🎉" : "결제에 실패했습니다 ❌"}
         </h1>
+
         <p className="text-gray-500 mb-6">
-          소중한 주문이 정상적으로 처리되었습니다.
+          {isSuccess
+            ? "소중한 주문이 정상적으로 처리되었습니다."
+            : "결제 과정에서 오류가 발생했습니다. 다시 시도해주세요."}
         </p>
 
-        <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
-          <p className="text-sm text-gray-600">
-            <span className="font-semibold text-gray-800">주문번호:</span>{" "}
-            {orderId}
-          </p>
-          <p className="text-sm text-gray-600 mt-1">
-            <span className="font-semibold text-gray-800">결제금액:</span>{" "}
-            {Number(amount).toLocaleString()}원
-          </p>
-        </div>
+        {isSuccess ? (
+          <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
+            <p className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-800">주문번호:</span>{" "}
+              {orderId}
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              <span className="font-semibold text-gray-800">결제금액:</span>{" "}
+              {Number(amount).toLocaleString()}원
+            </p>
+          </div>
+        ) : null}
 
         <button
           onClick={() => router.push("/")}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition-colors duration-200"
+          className={`w-full ${
+            isSuccess
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-red-500 hover:bg-red-600"
+          } text-white py-2 rounded-xl transition-colors duration-200`}
         >
           홈으로 돌아가기
         </button>
