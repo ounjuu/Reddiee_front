@@ -36,10 +36,17 @@ export default function SuccessPage() {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <p className="text-gray-500 text-lg font-medium animate-pulse">
-          결제 확인 중...
-        </p>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#f5faff] to-white">
+        <div className="flex flex-col items-center gap-4 p-8 rounded-2xl shadow-lg bg-white/70 backdrop-blur-xl border border-gray-100 animate-fadeIn">
+          {/* 로딩 스피너 */}
+          <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+
+          {/* 텍스트 */}
+          <p className="text-gray-600 text-lg font-semibold tracking-tight">
+            결제 확인 중입니다
+          </p>
+          <p className="text-gray-400 text-sm">잠시만 기다려주세요...</p>
+        </div>
       </div>
     );
   }
